@@ -1,0 +1,420 @@
+:root {
+    --wedding-ink: #2f2a27;
+    --wedding-muted: #6f6460;
+    --wedding-accent: #b98a78;
+    --wedding-accent-dark: #8e5e4f;
+    --wedding-paper: #fffaf7;
+    --wedding-sage: #6f7c65;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.wedding-spa {
+    color: var(--wedding-ink);
+    background: var(--wedding-paper);
+}
+
+.wedding-header .navbar-brand,
+.wedding-footer .logo {
+    color: var(--wedding-accent-dark);
+    letter-spacing: 0;
+}
+
+.wedding-header .navigation-holder ul li a {
+    text-transform: none;
+}
+
+.wedding-header .navigation-holder ul li a.active,
+.wedding-header .navigation-holder ul li a:hover {
+    color: var(--wedding-accent-dark);
+}
+
+.wedding-cover {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    background: var(--wedding-ink);
+    transition: opacity 500ms ease, visibility 500ms ease;
+}
+
+.wedding-cover.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wedding-cover-bg,
+.wedding-cover-overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.wedding-cover-bg {
+    background-position: center;
+    background-size: cover;
+    transform: scale(1.02);
+}
+
+.wedding-cover-overlay {
+    background:
+        linear-gradient(180deg, rgba(24, 20, 18, 0.28), rgba(24, 20, 18, 0.62)),
+        radial-gradient(circle at center, rgba(255, 250, 247, 0.14), rgba(24, 20, 18, 0.14));
+}
+
+.wedding-cover-content {
+    position: relative;
+    z-index: 1;
+    width: min(92vw, 720px);
+    padding: 36px 22px;
+    color: #fff;
+    text-align: center;
+}
+
+.wedding-cover-kicker {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 18px;
+    letter-spacing: 0;
+}
+
+.wedding-cover h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(52px, 10vw, 118px);
+    line-height: 0.95;
+    text-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+.wedding-cover p {
+    margin: 22px 0 30px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: clamp(18px, 2.6vw, 25px);
+}
+
+.wedding-cover-button {
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(142, 94, 79, 0.92);
+    backdrop-filter: blur(6px);
+}
+
+.wedding-cover-button:hover {
+    background: var(--wedding-accent-dark);
+}
+
+.wedding-music-player {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 9999;
+}
+
+.wedding-music-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 46px;
+    padding: 0 17px;
+    border: 1px solid rgba(142, 94, 79, 0.22);
+    border-radius: 999px;
+    color: #fff;
+    background: var(--wedding-accent-dark);
+    box-shadow: 0 12px 34px rgba(47, 42, 39, 0.16);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.wedding-music-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 15px 40px rgba(47, 42, 39, 0.22);
+}
+
+.wedding-music-toggle.is-playing {
+    background: var(--wedding-sage);
+}
+
+.wedding-music-toggle.is-unavailable {
+    color: var(--wedding-muted);
+    background: #fff;
+    cursor: default;
+}
+
+.wedding-hero .slide-sub-title h3,
+.wedding-hero .slide-title h2 span,
+.wedding-kicker,
+.wpo-section-title span {
+    color: var(--wedding-accent-dark);
+}
+
+.wedding-hero .slide-text p,
+.wedding-intro p {
+    color: var(--wedding-muted);
+}
+
+.wedding-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.wedding-btn-secondary {
+    background: transparent;
+    color: var(--wedding-accent-dark);
+    border: 1px solid rgba(142, 94, 79, 0.35);
+}
+
+.wedding-btn-secondary:hover {
+    color: #fff;
+}
+
+.wedding-intro {
+    background: #fff;
+}
+
+.wedding-intro h1 {
+    font-size: clamp(32px, 4vw, 54px);
+    line-height: 1.16;
+    margin: 12px 0 18px;
+}
+
+.wedding-kicker {
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.wedding-spa .wpo-event-section-s3,
+.wedding-spa .wpo-story-section-s4 {
+    background: #fffaf7;
+}
+
+.wedding-spa .wpo-event-item,
+.wedding-spa .story-text {
+    background: #fff;
+}
+
+.wedding-itinerary-card {
+    background: #fffaf7;
+}
+
+.wedding-event-img-contain {
+    background: #fffaf7;
+}
+
+.wedding-event-img-contain .wpo-event-img-inner {
+    background: #fffaf7;
+}
+
+.wedding-event-img-contain .wpo-event-img-inner img {
+    width: 100%;
+    height: auto;
+    object-fit: initial;
+    display: block;
+}
+
+.wedding-event-img-fill .wpo-event-img-inner {
+    height: clamp(420px, 46vw, 560px);
+    background: #fffaf7;
+    overflow: hidden;
+}
+
+.wedding-event-img-fill .wpo-event-img-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+}
+
+.wedding-itinerary-visual {
+    display: grid;
+    place-items: center;
+    min-height: 250px;
+    background:
+        linear-gradient(180deg, rgba(255, 250, 247, 0.94), rgba(255, 250, 247, 0.98)),
+        url("../images/slider/hero-bg22.png") center / cover no-repeat;
+    color: var(--wedding-accent-dark);
+    text-align: center;
+}
+
+.wedding-itinerary-visual i {
+    display: grid;
+    place-items: center;
+    width: 82px;
+    height: 82px;
+    margin-bottom: 12px;
+    color: #fff;
+    background: var(--wedding-accent-dark);
+    border-radius: 50%;
+    font-size: 34px;
+}
+
+.wedding-itinerary-visual span {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.wedding-important-section {
+    background: #fff;
+}
+
+.wedding-sponsors-wrap .row {
+    justify-content: center;
+}
+
+.wedding-sponsor-item {
+    height: calc(100% - 30px);
+    margin-bottom: 30px;
+    padding: 40px 28px 34px;
+    text-align: center;
+    background: #fffaf7;
+    border: 1px solid rgba(185, 138, 120, 0.18);
+    box-shadow: 0 12px 34px rgba(47, 42, 39, 0.06);
+}
+
+.wedding-sponsor-icon {
+    display: grid;
+    place-items: center;
+    width: 104px;
+    height: 104px;
+    margin: 0 auto 24px;
+    color: #fff;
+    background: var(--wedding-accent-dark);
+    border-radius: 50%;
+    box-shadow: 0 12px 28px rgba(47, 42, 39, 0.12);
+    font-size: 42px;
+}
+
+.wedding-sponsor-text span {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--wedding-accent-dark);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.wedding-sponsor-text h3 {
+    margin: 0;
+    color: var(--wedding-ink);
+    font-size: 24px;
+    line-height: 1.28;
+}
+
+@media (max-width: 575px) {
+    .wedding-sponsor-item {
+        padding: 28px 20px 26px;
+    }
+
+    .wedding-sponsor-icon {
+        width: 88px;
+        height: 88px;
+        font-size: 35px;
+    }
+
+    .wedding-sponsor-text h3 {
+        font-size: 21px;
+    }
+}
+
+.wedding-important-note {
+    max-width: 760px;
+    margin: 18px auto 0;
+}
+
+.wedding-important-note p {
+    color: var(--wedding-muted);
+}
+
+.wedding-spa .wpo-event-section-s3 .wpo-event-item .wpo-event-text ul li a,
+.wedding-spa .wpo-couple-section-s4 ul li a {
+    color: var(--wedding-accent-dark);
+}
+
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper:before {
+    background: rgba(255, 250, 247, 0.94);
+}
+
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area .form-control,
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area select.form-control {
+    color: var(--wedding-ink);
+}
+
+.wedding-form-message {
+    display: none;
+    margin-top: 18px;
+    color: var(--wedding-sage);
+    font-weight: 600;
+}
+
+.wedding-form-message.is-visible {
+    display: block;
+}
+
+.wedding-footer .wpo-upper-footer {
+    background: #f7eee9;
+}
+
+.wedding-footer .widget-title h3,
+.wedding-footer .about-widget p,
+.wedding-footer .contact-ft p,
+.wedding-footer .link-widget ul li a,
+.wedding-footer .logo {
+    color: var(--wedding-ink);
+}
+
+.wedding-footer .link-widget ul li a:hover,
+.wedding-footer .logo:hover {
+    color: var(--wedding-accent-dark);
+}
+
+.wedding-footer .wpo-lower-footer {
+    background: #efe1d9;
+}
+
+.wedding-footer .wpo-lower-footer p {
+    color: var(--wedding-ink);
+}
+
+@media (max-width: 991px) {
+    .wedding-actions {
+        justify-content: center;
+    }
+
+    .wedding-hero .wpo-static-hero-inner {
+        text-align: center;
+    }
+}
+
+@media (max-width: 575px) {
+    .wedding-cover-content {
+        padding: 28px 18px;
+    }
+
+    .wedding-cover h1 {
+        font-size: clamp(46px, 17vw, 76px);
+    }
+
+    .wedding-actions .theme-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .wedding-music-player {
+        right: 14px;
+        bottom: 14px;
+    }
+
+    .wedding-music-toggle {
+        min-height: 42px;
+        padding: 0 14px;
+    }
+}
