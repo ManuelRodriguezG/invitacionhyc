@@ -3,6 +3,7 @@
 
     var musicAudio = null;
     var musicButton = null;
+    var musicStartSeconds = 8;
 
     function setMusicButton(isPlaying) {
         if (!musicButton) {
@@ -28,6 +29,14 @@
     function playWeddingMusic() {
         if (!musicAudio || !musicAudio.paused) {
             return;
+        }
+
+        if (musicAudio.currentTime < musicStartSeconds) {
+            try {
+                musicAudio.currentTime = musicStartSeconds;
+            } catch (error) {
+                window.console.warn("No fue posible adelantar la cancion", error);
+            }
         }
 
         musicAudio.play().then(function () {
@@ -85,10 +94,23 @@
 
             var formData = new FormData(this);
             var payload = {};
+            var whatsappNumber = "523333916461";
 
             formData.forEach(function (value, key) {
                 payload[key] = value;
             });
+
+            var adults = payload.adults || "No especificado";
+            var children = payload.children || "No especificado";
+            var message = [
+                "Hola, quiero confirmar mi asistencia a la boda de Hector y Cynthia.",
+                "",
+                "Nombre: " + (payload.name || ""),
+                "Asistencia: " + (payload.attendance || ""),
+                "Adultos: " + adults,
+                "Ninos: " + children,
+                "Mensaje: " + (payload.message || "Sin mensaje")
+            ].join("\n");
 
             try {
                 var saved = JSON.parse(window.localStorage.getItem("wedding_rsvp") || "[]");
@@ -101,9 +123,11 @@
                 window.console.warn("No fue posible guardar RSVP localmente", error);
             }
 
+            window.open("https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message), "_blank");
+
             $("#rsvp-message")
                 .addClass("is-visible")
-                .text("Gracias. Tu confirmacion quedo registrada en esta version local.");
+                .text("Se abrira WhatsApp para enviar tu confirmacion.");
 
             this.reset();
             $("#attend").prop("checked", true);
