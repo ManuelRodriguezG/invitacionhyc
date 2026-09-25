@@ -3,8 +3,10 @@
     --wedding-muted: #6f6460;
     --wedding-accent: #b98a78;
     --wedding-accent-dark: #8e5e4f;
+    --wedding-suit: #b79a7e;
+    --wedding-suit-dark: #8f725b;
     --wedding-paper: #fffaf7;
-    --wedding-sage: #6f7c65;
+    --wedding-sage: var(--wedding-suit);
 }
 
 html {
@@ -59,6 +61,10 @@ html {
     background-position: center;
     background-size: cover;
     transform: scale(1.02);
+}
+
+.wedding-cover-bg-real {
+    background-position: center 36%;
 }
 
 .wedding-cover-overlay {
@@ -137,7 +143,7 @@ html {
 }
 
 .wedding-music-toggle.is-playing {
-    background: var(--wedding-sage);
+    background: var(--wedding-suit-dark);
 }
 
 .wedding-music-toggle.is-unavailable {
@@ -150,7 +156,57 @@ html {
 .wedding-hero .slide-title h2 span,
 .wedding-kicker,
 .wpo-section-title span {
-    color: var(--wedding-accent-dark);
+    color: var(--wedding-suit-dark);
+}
+
+.wedding-spa .theme-btn,
+.wedding-spa .view-cart-btn,
+.wedding-spa .theme-btn-s3,
+.wedding-spa .theme-btn-s4 {
+    background: var(--wedding-suit);
+    color: #fff;
+}
+
+.wedding-spa .theme-btn:after,
+.wedding-spa .view-cart-btn:after,
+.wedding-spa .theme-btn-s3:after,
+.wedding-spa .theme-btn-s4:after {
+    border-color: var(--wedding-suit);
+}
+
+.wedding-spa .theme-btn:hover,
+.wedding-spa .view-cart-btn:hover,
+.wedding-spa .theme-btn:focus,
+.wedding-spa .view-cart-btn:focus,
+.wedding-spa .theme-btn:active,
+.wedding-spa .view-cart-btn:active,
+.wedding-spa .theme-btn-s3:hover,
+.wedding-spa .theme-btn-s3:focus,
+.wedding-spa .theme-btn-s3:active,
+.wedding-spa .theme-btn-s4:hover,
+.wedding-spa .theme-btn-s4:focus,
+.wedding-spa .theme-btn-s4:active {
+    background: var(--wedding-suit-dark);
+    color: #fff;
+}
+
+.wedding-hero .slide-title .shape img {
+    filter: sepia(0.62) saturate(0.72) hue-rotate(342deg) brightness(1.03);
+    opacity: 0.92;
+}
+
+.wedding-hero .slide-title h2 {
+    font-size: clamp(46px, 5vw, 76px);
+    line-height: 0.98;
+}
+
+.wedding-hero .slide-title h2 span {
+    font-size: clamp(30px, 3.1vw, 46px);
+}
+
+.wedding-hero .wpo-wedding-date #clock .time,
+.wedding-hero .wpo-wedding-date #clock3 .time {
+    color: var(--wedding-suit-dark);
 }
 
 .wedding-hero .slide-text p,
@@ -167,8 +223,8 @@ html {
 
 .wedding-btn-secondary {
     background: transparent;
-    color: var(--wedding-accent-dark);
-    border: 1px solid rgba(142, 94, 79, 0.35);
+    color: var(--wedding-suit-dark);
+    border: 1px solid rgba(143, 114, 91, 0.42);
 }
 
 .wedding-btn-secondary:hover {
@@ -189,6 +245,37 @@ html {
     display: inline-block;
     font-size: 18px;
     margin-bottom: 6px;
+}
+
+.wedding-invite-card {
+    width: min(100%, 520px);
+    margin: 26px auto 0;
+    padding: 22px 24px;
+    background: #fffaf7;
+    border: 1px solid rgba(185, 138, 120, 0.2);
+    box-shadow: 0 12px 34px rgba(47, 42, 39, 0.06);
+}
+
+.wedding-invite-card[hidden] {
+    display: none;
+}
+
+.wedding-invite-card span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--wedding-suit-dark);
+    font-weight: 700;
+}
+
+.wedding-invite-card strong {
+    display: block;
+    color: var(--wedding-ink);
+    font-size: clamp(26px, 4vw, 40px);
+    line-height: 1.1;
+}
+
+.wedding-invite-card p {
+    margin: 12px 0 0;
 }
 
 .wedding-spa .wpo-event-section-s3,
@@ -217,7 +304,7 @@ html {
     height: 88px;
     margin: 0 auto 22px;
     color: #fff;
-    background: var(--wedding-accent-dark);
+    background: var(--wedding-suit-dark);
     border-radius: 50%;
     font-size: 34px;
 }
@@ -225,7 +312,7 @@ html {
 .wedding-parent-card span {
     display: block;
     margin-bottom: 10px;
-    color: var(--wedding-accent-dark);
+    color: var(--wedding-suit-dark);
     font-size: 16px;
     font-weight: 600;
 }
@@ -240,6 +327,33 @@ html {
 .wedding-spa .wpo-event-item,
 .wedding-spa .story-text {
     background: #fff;
+}
+
+.wedding-hero .static-hero-img-inner img,
+.wedding-spa .middle-couple-pic-inner img,
+.wedding-spa .story-timeline .img-holder > img,
+.wedding-spa .portfolio-grids .grid .img-holder img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center 34%;
+}
+
+.wedding-hero .static-hero-img-inner img {
+    aspect-ratio: 4 / 5;
+}
+
+.wedding-spa .middle-couple-pic-inner img {
+    aspect-ratio: 4 / 5;
+    object-position: center 28%;
+}
+
+.wedding-spa .story-timeline .img-holder > img {
+    aspect-ratio: 1 / 1;
+}
+
+.wedding-spa .portfolio-grids .grid .img-holder img {
+    aspect-ratio: 4 / 5;
+    display: block;
 }
 
 .wedding-itinerary-card {
@@ -285,7 +399,7 @@ html {
     background:
         linear-gradient(180deg, rgba(255, 250, 247, 0.94), rgba(255, 250, 247, 0.98)),
         url("../images/slider/hero-bg22.png") center / cover no-repeat;
-    color: var(--wedding-accent-dark);
+    color: var(--wedding-suit-dark);
     text-align: center;
 }
 
@@ -296,7 +410,7 @@ html {
     height: 82px;
     margin-bottom: 12px;
     color: #fff;
-    background: var(--wedding-accent-dark);
+    background: var(--wedding-suit-dark);
     border-radius: 50%;
     font-size: 34px;
 }
@@ -332,7 +446,7 @@ html {
     height: 104px;
     margin: 0 auto 24px;
     color: #fff;
-    background: var(--wedding-accent-dark);
+    background: var(--wedding-suit-dark);
     border-radius: 50%;
     box-shadow: 0 12px 28px rgba(47, 42, 39, 0.12);
     font-size: 42px;
@@ -341,7 +455,7 @@ html {
 .wedding-sponsor-text span {
     display: block;
     margin-bottom: 10px;
-    color: var(--wedding-accent-dark);
+    color: var(--wedding-suit-dark);
     font-size: 15px;
     font-weight: 600;
 }
@@ -380,11 +494,28 @@ html {
 
 .wedding-spa .wpo-event-section-s3 .wpo-event-item .wpo-event-text ul li a,
 .wedding-spa .wpo-couple-section-s4 ul li a {
-    color: var(--wedding-accent-dark);
+    color: var(--wedding-suit-dark);
+}
+
+.wedding-spa .wpo-story-section-s4 .story-timeline .round-shape,
+.wedding-spa .wpo-story-section-s4 .story-timeline .round-shape-2 {
+    border-color: var(--wedding-suit);
 }
 
 .wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper:before {
     background: rgba(255, 250, 247, 0.94);
+}
+
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area .submit-area .theme-btn {
+    background: var(--wedding-suit);
+    color: #fff;
+}
+
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area .submit-area .theme-btn:hover,
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area .submit-area .theme-btn:focus,
+.wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area .submit-area .theme-btn:active {
+    background: var(--wedding-suit-dark);
+    color: #fff;
 }
 
 .wedding-spa .wpo-contact-section-s4 .wpo-contact-section-wrapper .wpo-contact-form-area .form-control,
@@ -395,7 +526,7 @@ html {
 .wedding-form-message {
     display: none;
     margin-top: 18px;
-    color: var(--wedding-sage);
+    color: var(--wedding-suit-dark);
     font-weight: 600;
 }
 

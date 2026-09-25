@@ -4,6 +4,7 @@
     var musicAudio = null;
     var musicButton = null;
     var musicStartSeconds = 8;
+    var currentInvitation = null;
 
     function setMusicButton(isPlaying) {
         if (!musicButton) {
@@ -81,6 +82,78 @@
         window.setInterval(update, 1000);
     }
 
+    function getInvitationCode() {
+        var params = new URLSearchParams(window.location.search);
+        return (params.get("inv") || params.get("codigo") || "").trim().toUpperCase();
+    }
+
+    function replaceSelectOptions(select, maxValue, label) {
+        if (!select) {
+            return;
+        }
+
+        var max = Math.max(0, parseInt(maxValue, 10) || 0);
+        select.innerHTML = "";
+
+        var placeholder = document.createElement("option");
+        placeholder.disabled = true;
+        placeholder.textContent = label;
+        select.appendChild(placeholder);
+
+        for (var index = 0; index <= max; index += 1) {
+            var option = document.createElement("option");
+            option.value = String(index).padStart(2, "0");
+            option.textContent = String(index).padStart(2, "0");
+            select.appendChild(option);
+        }
+
+        select.value = String(max).padStart(2, "0");
+    }
+
+    function applyInvitation(invitation) {
+        var card = document.getElementById("guest-invite-card");
+        var name = document.getElementById("guest-invite-name");
+        var passes = document.getElementById("guest-invite-passes");
+        var nameInput = document.getElementById("name");
+        var adultsSelect = document.querySelector('[name="adults"]');
+        var childrenSelect = document.querySelector('[name="children"]');
+
+        currentInvitation = invitation;
+
+        if (card && name && passes) {
+            name.textContent = invitation.name;
+            passes.textContent = "Pases asignados: " + invitation.adults + " adultos y " + invitation.children + " ninos.";
+            card.hidden = false;
+        }
+
+        if (nameInput && !nameInput.value) {
+            nameInput.value = invitation.name;
+        }
+
+        replaceSelectOptions(adultsSelect, invitation.adults, "Adultos");
+        replaceSelectOptions(childrenSelect, invitation.children, "Ninos");
+    }
+
+    function loadPersonalInvitation() {
+        var code = getInvitationCode();
+
+        if (!code) {
+            return;
+        }
+
+        fetch("invitado.php?code=" + encodeURIComponent(code), { cache: "no-store" })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("Invitado no encontrado");
+                }
+                return response.json();
+            })
+            .then(applyInvitation)
+            .catch(function (error) {
+                window.console.warn("No fue posible personalizar la invitacion", error);
+            });
+    }
+
     function bindSinglePageNav() {
         $('.navigation-holder a[href^="#"], .wedding-footer a[href^="#"], .wedding-actions a[href^="#"]').on("click", function () {
             $(".navigation-holder").removeClass("slideInn");
@@ -110,7 +183,26 @@
                 "Adultos: " + adults,
                 "Ninos: " + children,
                 "Mensaje: " + (payload.message || "Sin mensaje")
-            ].join("\n");
+            ];
+
+            if (currentInvitation) {
+                message.splice(2, 0, "Codigo: " + currentInvitation.code);
+                message.splice(3, 0, "Invitacion para: " + currentInvitation.name);
+                message.splice(4, 0, "Pases asignados: " + currentInvitation.adults + " adultos y " + currentInvitation.children + " ninos");
+                message.splice(5, 0, "");
+            }
+
+            message = message.join("\n");
+
+            var confirmation = {
+                code: currentInvitation ? currentInvitation.code : "",
+                invitation_name: currentInvitation ? currentInvitation.name : "",
+                name: payload.name || "",
+                attendance: payload.attendance || "",
+                adults: parseInt(payload.adults, 10) || 0,
+                children: parseInt(payload.children, 10) || 0,
+                message: payload.message || ""
+            };
 
             try {
                 var saved = JSON.parse(window.localStorage.getItem("wedding_rsvp") || "[]");
@@ -123,7 +215,18 @@
                 window.console.warn("No fue posible guardar RSVP localmente", error);
             }
 
-            window.open("https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message), "_blank");
+            fetch("rsvp.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(confirmation),
+                keepalive: true
+            }).catch(function (error) {
+                window.console.warn("No fue posible guardar la confirmacion", error);
+            });
+
+            window.location.href = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
 
             $("#rsvp-message")
                 .addClass("is-visible")
@@ -185,6 +288,7 @@
     }
 
     $(function () {
+        loadPersonalInvitation();
         renderCountdown();
         bindSinglePageNav();
         bindRsvp();
