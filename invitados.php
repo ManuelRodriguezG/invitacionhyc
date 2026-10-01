@@ -90,6 +90,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($action === 'update') {
+        $code = strtoupper(trim($_POST['code'] ?? ''));
+        $name = trim($_POST['name'] ?? '');
+        $adults = max(0, (int)($_POST['adults'] ?? 0));
+        $children = max(0, (int)($_POST['children'] ?? 0));
+        $tableNumber = trim($_POST['table_number'] ?? '');
+
+        foreach ($guests as &$guest) {
+            if (strtoupper($guest['code'] ?? '') === $code && $name !== '') {
+                $guest['name'] = $name;
+                $guest['adults'] = $adults;
+                $guest['children'] = $children;
+                $guest['table_number'] = $tableNumber;
+                break;
+            }
+        }
+        unset($guest);
+
+        writeGuests($dataFile, $guests);
+        header('Location: invitados.php?pin=' . urlencode($adminPin));
+        exit;
+    }
+
     $name = trim($_POST['name'] ?? '');
     $adults = max(0, (int)($_POST['adults'] ?? 0));
     $children = max(0, (int)($_POST['children'] ?? 0));
@@ -109,6 +132,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     header('Location: invitados.php?pin=' . urlencode($adminPin));
     exit;
+}
+
+$editCode = strtoupper(trim($_GET['edit'] ?? ''));
+$editingGuest = null;
+
+if ($editCode !== '') {
+    foreach ($guests as $guest) {
+        if (strtoupper($guest['code'] ?? '') === $editCode) {
+            $editingGuest = $guest;
+            break;
+        }
+    }
 }
 ?>
 <!doctype html>
@@ -161,26 +196,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <section class="panel">
         <form method="post" class="grid">
-            <input type="hidden" name="action" value="create">
+            <input type="hidden" name="action" value="<?php echo $editingGuest ? 'update' : 'create'; ?>">
             <input type="hidden" name="pin" value="<?php echo htmlspecialchars($adminPin); ?>">
+            <?php if ($editingGuest): ?>
+                <input type="hidden" name="code" value="<?php echo htmlspecialchars($editingGuest['code']); ?>">
+            <?php endif; ?>
             <div>
                 <label for="name">Nombre para la invitacion</label>
-                <input id="name" name="name" required placeholder="Ej. Familia Perez Lopez">
+                <input id="name" name="name" required placeholder="Ej. Familia Perez Lopez" value="<?php echo htmlspecialchars($editingGuest['name'] ?? ''); ?>">
             </div>
             <div>
                 <label for="adults">Adultos</label>
-                <input id="adults" name="adults" type="number" min="0" value="2">
+                <input id="adults" name="adults" type="number" min="0" value="<?php echo htmlspecialchars((string)($editingGuest['adults'] ?? 2)); ?>">
             </div>
             <div>
                 <label for="children">Ni&ntilde;os</label>
-                <input id="children" name="children" type="number" min="0" value="0">
+                <input id="children" name="children" type="number" min="0" value="<?php echo htmlspecialchars((string)($editingGuest['children'] ?? 0)); ?>">
             </div>
             <div>
                 <label for="table_number">Mesa</label>
-                <input id="table_number" name="table_number" placeholder="Ej. 12">
+                <input id="table_number" name="table_number" placeholder="Ej. 12" value="<?php echo htmlspecialchars($editingGuest['table_number'] ?? ''); ?>">
             </div>
-            <button type="submit">Generar link</button>
+            <button type="submit"><?php echo $editingGuest ? 'Guardar cambios' : 'Generar link'; ?></button>
         </form>
+        <?php if ($editingGuest): ?>
+            <p>Editando <strong><?php echo htmlspecialchars($editingGuest['name']); ?></strong>. El codigo y el link se conservan.</p>
+            <p><a class="button" href="invitados.php?pin=<?php echo urlencode($adminPin); ?>">Cancelar edicion</a></p>
+        <?php endif; ?>
     </section>
 
     <section class="panel">
@@ -210,6 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="actions">
                             <button type="button" class="secondary" data-copy="<?php echo htmlspecialchars($link); ?>">Copiar</button>
                             <a class="button" href="<?php echo htmlspecialchars($link); ?>" target="_blank" rel="noopener">Abrir</a>
+                            <a class="button" href="invitados.php?pin=<?php echo urlencode($adminPin); ?>&edit=<?php echo urlencode($guest['code']); ?>">Editar</a>
                             <form method="post" onsubmit="return confirm('Eliminar este invitado?');">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="pin" value="<?php echo htmlspecialchars($adminPin); ?>">
