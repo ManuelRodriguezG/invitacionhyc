@@ -115,6 +115,9 @@
         var name = document.getElementById("guest-invite-name");
         var passes = document.getElementById("guest-invite-passes");
         var nameInput = document.getElementById("name");
+        var rsvpForm = document.getElementById("rsvp-form");
+        var rsvpMessage = document.getElementById("rsvp-message");
+        var rsvpButton = rsvpForm ? rsvpForm.querySelector('[type="submit"]') : null;
         var adultsSelect = document.querySelector('[name="adults"]');
         var childrenSelect = document.querySelector('[name="children"]');
 
@@ -123,6 +126,9 @@
         if (card && name && passes) {
             name.textContent = invitation.name;
             passes.textContent = "Pases asignados: " + invitation.adults + " adultos y " + invitation.children + " ninos.";
+            if (invitation.table_number) {
+                passes.textContent += " Mesa: " + invitation.table_number + ".";
+            }
             card.hidden = false;
         }
 
@@ -132,6 +138,21 @@
 
         replaceSelectOptions(adultsSelect, invitation.adults, "Adultos");
         replaceSelectOptions(childrenSelect, invitation.children, "Ninos");
+
+        if (invitation.confirmed && rsvpForm) {
+            rsvpForm.querySelectorAll("input, select, textarea, button").forEach(function (field) {
+                field.disabled = true;
+            });
+
+            if (rsvpButton) {
+                rsvpButton.textContent = "Confirmacion recibida";
+            }
+
+            if (rsvpMessage) {
+                rsvpMessage.classList.add("is-visible");
+                rsvpMessage.textContent = "Tu confirmacion ya fue registrada. Muchas gracias.";
+            }
+        }
     }
 
     function loadPersonalInvitation() {
@@ -165,9 +186,16 @@
         $("#rsvp-form").on("submit", function (event) {
             event.preventDefault();
 
+            var form = this;
+            var submitButton = form.querySelector('[type="submit"]');
             var formData = new FormData(this);
             var payload = {};
             var whatsappNumber = "523333916461";
+
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Registrando...";
+            }
 
             formData.forEach(function (value, key) {
                 payload[key] = value;
@@ -189,7 +217,12 @@
                 message.splice(2, 0, "Codigo: " + currentInvitation.code);
                 message.splice(3, 0, "Invitacion para: " + currentInvitation.name);
                 message.splice(4, 0, "Pases asignados: " + currentInvitation.adults + " adultos y " + currentInvitation.children + " ninos");
-                message.splice(5, 0, "");
+                if (currentInvitation.table_number) {
+                    message.splice(5, 0, "Mesa: " + currentInvitation.table_number);
+                    message.splice(6, 0, "");
+                } else {
+                    message.splice(5, 0, "");
+                }
             }
 
             message = message.join("\n");
@@ -197,6 +230,7 @@
             var confirmation = {
                 code: currentInvitation ? currentInvitation.code : "",
                 invitation_name: currentInvitation ? currentInvitation.name : "",
+                table_number: currentInvitation ? currentInvitation.table_number : "",
                 name: payload.name || "",
                 attendance: payload.attendance || "",
                 adults: parseInt(payload.adults, 10) || 0,
@@ -220,20 +254,41 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(confirmation),
-                keepalive: true
+                body: JSON.stringify(confirmation)
+            }).then(function (response) {
+                if (response.status === 409) {
+                    throw new Error("already_confirmed");
+                }
+
+                if (!response.ok) {
+                    throw new Error("save_failed");
+                }
+
+                window.location.href = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
             }).catch(function (error) {
+                var errorMessage = error.message === "already_confirmed"
+                    ? "Esta invitacion ya tiene una confirmacion registrada. Muchas gracias."
+                    : "No fue posible guardar tu confirmacion. Intenta nuevamente en unos momentos.";
+
+                if (submitButton && error.message !== "already_confirmed") {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Confirmar por WhatsApp";
+                }
+
+                if (submitButton && error.message === "already_confirmed") {
+                    submitButton.textContent = "Confirmacion recibida";
+                }
+
+                $("#rsvp-message")
+                    .addClass("is-visible")
+                    .text(errorMessage);
+
                 window.console.warn("No fue posible guardar la confirmacion", error);
             });
 
-            window.location.href = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
-
             $("#rsvp-message")
                 .addClass("is-visible")
-                .text("Se abrira WhatsApp para enviar tu confirmacion.");
-
-            this.reset();
-            $("#attend").prop("checked", true);
+                .text("Estamos registrando tu confirmacion...");
         });
     }
 

@@ -93,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $adults = max(0, (int)($_POST['adults'] ?? 0));
     $children = max(0, (int)($_POST['children'] ?? 0));
+    $tableNumber = trim($_POST['table_number'] ?? '');
 
     if ($name !== '') {
         $guests[] = [
@@ -100,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $name,
             'adults' => $adults,
             'children' => $children,
+            'table_number' => $tableNumber,
             'created_at' => date('c'),
         ];
         writeGuests($dataFile, $guests);
@@ -130,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         h1 { margin: 0 0 8px; font-size: 34px; }
         p { color: var(--muted); }
         .panel { margin: 24px 0; padding: 22px; background: #fff; border: 1px solid var(--line); box-shadow: 0 12px 34px rgba(47, 42, 39, 0.06); }
-        form.grid { display: grid; grid-template-columns: 1fr 120px 120px auto; gap: 12px; align-items: end; }
+        form.grid { display: grid; grid-template-columns: 1fr 110px 110px 120px auto; gap: 12px; align-items: end; }
         label { display: block; margin-bottom: 7px; color: var(--muted); font-size: 13px; font-weight: 700; }
         input { width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--line); color: var(--ink); background: #fff; }
         button, .button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border: 0; color: #fff; background: var(--accent); cursor: pointer; text-decoration: none; font-weight: 700; }
@@ -173,6 +175,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="children">Ni&ntilde;os</label>
                 <input id="children" name="children" type="number" min="0" value="0">
             </div>
+            <div>
+                <label for="table_number">Mesa</label>
+                <input id="table_number" name="table_number" placeholder="Ej. 12">
+            </div>
             <button type="submit">Generar link</button>
         </form>
     </section>
@@ -185,6 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <th>Invitado</th>
                 <th>Adultos</th>
                 <th>Ni&ntilde;os</th>
+                <th>Mesa</th>
                 <th>Link</th>
                 <th>Acciones</th>
             </tr>
@@ -197,6 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td><?php echo htmlspecialchars($guest['name']); ?></td>
                     <td><?php echo (int)$guest['adults']; ?></td>
                     <td><?php echo (int)$guest['children']; ?></td>
+                    <td><?php echo htmlspecialchars($guest['table_number'] ?? ''); ?></td>
                     <td><input class="link" readonly value="<?php echo htmlspecialchars($link); ?>"></td>
                     <td>
                         <div class="actions">
@@ -213,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </tr>
             <?php endforeach; ?>
             <?php if (!$guests): ?>
-                <tr><td colspan="6">Aun no hay invitados personalizados.</td></tr>
+                <tr><td colspan="7">Aun no hay invitados personalizados.</td></tr>
             <?php endif; ?>
             </tbody>
         </table>

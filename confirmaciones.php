@@ -120,6 +120,7 @@ $rows = array_reverse(array_values($latestByKey));
                 <th>Fecha</th>
                 <th>Codigo</th>
                 <th>Invitacion</th>
+                <th>Mesa</th>
                 <th>Nombre</th>
                 <th>Asistencia</th>
                 <th>Adultos</th>
@@ -133,6 +134,7 @@ $rows = array_reverse(array_values($latestByKey));
                     <td><?php echo htmlspecialchars($item['created_at'] ?? ''); ?></td>
                     <td><code><?php echo htmlspecialchars($item['code'] ?? ''); ?></code></td>
                     <td><?php echo htmlspecialchars($item['invitation_name'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($item['table_number'] ?? ''); ?></td>
                     <td><?php echo htmlspecialchars($item['name'] ?? ''); ?></td>
                     <td><?php echo htmlspecialchars($item['attendance'] ?? ''); ?></td>
                     <td><?php echo (int)($item['adults'] ?? 0); ?></td>
@@ -141,7 +143,7 @@ $rows = array_reverse(array_values($latestByKey));
                 </tr>
             <?php endforeach; ?>
             <?php if (!$rows): ?>
-                <tr><td colspan="8">Aun no hay confirmaciones.</td></tr>
+                <tr><td colspan="9">Aun no hay confirmaciones.</td></tr>
             <?php endif; ?>
             </tbody>
         </table>
